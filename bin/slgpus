@@ -1,0 +1,17 @@
+#!/bin/bash
+set -eu
+
+
+NUM_GPUS=`sinfo -h -o '%12n %6G' | awk '$2 ~ /gpu.+/ {cnt=substr($2, 5); sum+=cnt;} END{print sum}'`
+NUM_GPUS_ACTIVE=`sinfo -h -o '%12n %.5t %6G' | awk '($2 !~ /down.+/ && $3 ~ /gpu.+/) {cnt=substr($3, 5); sum+=cnt;} END{print sum;}'`
+NUM_GPUS_USED=`squeue -o %b | awk '$1 ~ /gpu.+/ {cnt=substr($1, 5); sum+=cnt;} END{print sum;}'`
+
+echo "Total GPUs:        ${NUM_GPUS}"
+echo "Total active:      ${NUM_GPUS_ACTIVE}  (not 'down*')"
+echo "GPUs in use:       ${NUM_GPUS_USED}"
+echo ""
+
+NUM_NODES_IDLE=`sinfo -o '%12n %10P %.5t' | awk '$2 ~ /gpu.+/ {print $0;}' | grep idle | wc -l`
+NODES_IDLE=`sinfo -o '%12n %10P %.5t' | awk '($2 ~ /gpu.+/ && $3=="idle") {print $1;}' | paste -sd ","`
+
+echo "Idle nodes:        ${NUM_NODES_IDLE} - ${NODES_IDLE}"
