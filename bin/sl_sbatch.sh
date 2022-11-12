@@ -14,4 +14,4 @@ NUM_CPU=$(( $NUM_GPUS * 4 ))
 MEM_SIZE=$(( $NUM_GPUS * 31 ))
 
 
-sbatch --gres=gpu:$NUM_GPUS -c $NUM_CPU --mem=${MEM_SIZE}GB --constraint=Pascal "$@"
+sbatch --gres=gpu:$NUM_GPUS -c $NUM_CPU --mem=${MEM_SIZE}GB "$@"
