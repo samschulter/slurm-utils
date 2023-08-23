@@ -9,6 +9,6 @@
 alias slinfo="sinfo -o '%10P %12n %.5t %.4c %.6m %6G %35f %10L %8O %10E' -S '+P+N'"
 
 # More detailed "squeue"
-alias slqueue="squeue -o '%8i %10u %15j %4t %5D %15R %6b %3C %7m %10M %11l %11L' -S +M"
+alias slqueue="squeue -o '%8i %10u %15j %4t %5D %15R %12b %3C %7m %10M %11l %11L' -S +M"
 
 
