@@ -60,6 +60,11 @@ def find_active_constraint(constraint: str, node_constraints: List[str]):
     return any(constraint == txt for txt in node_constraints)
 
 
+def parse_tres_per_node(text: str):
+    # Parses the 'TRES_PER_NODE' output of squeue and returns active GPU count
+    return int(text.split(":")[-1])
+
+
 def main():
     args = parse_arguments()
 
@@ -102,7 +107,7 @@ def main():
         if "gpu" in job[6] and job[5] in active_node_names
     ]
     print("\nUsage:")
-    num_gpus_used = sum([int(job[6].split(":")[1]) for job in active_jobs])
+    num_gpus_used = sum([parse_tres_per_node(job[6]) for job in active_jobs])
     print(f" - {num_gpus_used}/{num_gpus_online} GPUs in use -> "
           f"{num_gpus_online-num_gpus_used} GPUs free")
 
@@ -115,7 +120,7 @@ def main():
             num_gpus_per_node[node[1]] += int(node[5].split(":")[1])
         num_gpus_used_per_node = defaultdict(int)
         for job in active_jobs:
-            num_gpus_used_per_node[job[5]] += int(job[6].split(":")[1])
+            num_gpus_used_per_node[job[5]] += parse_tres_per_node(job[6])
         for node_name, node_gpu_cnt in num_gpus_per_node.items():
             num_used = num_gpus_used_per_node[node_name]
             print(f" - [{node_name}] {num_used}/{node_gpu_cnt} used -> "
