@@ -37,7 +37,7 @@ def get_slqueue_output():
     output, error = run_bash_command([
         "squeue",
         "-o",
-        "'%8i %10u %15j %4t %5D %15R %6b %3C %7m %10M %11l %11L'",
+        "'%8i %10u %15j %4t %5D %15R %10b %3C %7m %10M %11l %11L'",
         "-S",
         "+M",
     ])
